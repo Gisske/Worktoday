@@ -78,28 +78,28 @@ app.post('/deleteMember', async (req, res) => {
   }
 });
 
+// API สำหรับอัปเดตข้อมูลสมาชิก
 app.post('/updateMember', upload.single('picture'), async (req, res) => {
   try {
     const { student_id, fullname, username, password } = req.body;
 
     const updatedData = {
-      fullname,
-      username,
-      password,
+      fullname: fullname,
+      username: username,
+      password: password,
     };
 
-    // ถ้ามีการอัปโหลดไฟล์รูปภาพ
+    // ถ้ามีการอัปโหลดไฟล์รูปโปรไฟล์
     if (req.file) {
-      updatedData.picture = req.file.filename; // เก็บชื่อไฟล์ที่อัปโหลด
+      updatedData.picture = req.file.filename;
     }
 
-    // อัปเดตข้อมูลในฐานข้อมูล
+    // อัปเดตข้อมูลนักเรียนในฐานข้อมูล
     await knex('student')
-      .where({ student_id })
+      .where({ student_id: student_id })
       .update(updatedData);
 
     res.send({
-      status: 1,
       message: 'อัปเดตข้อมูลสำเร็จ',
       data: updatedData,
     });
@@ -111,7 +111,6 @@ app.post('/updateMember', upload.single('picture'), async (req, res) => {
     });
   }
 });
-
 
 app.post('/insertMember', upload.single('picture'), async (req, res) => {
   try {
@@ -144,7 +143,27 @@ app.post('/insertMember', upload.single('picture'), async (req, res) => {
 });
 
 
-
+app.post('/upload-single', upload.single('picture'), async (req, res) => {
+  try {
+    console.log('file=', req.file)
+    console.log('username=', req.body.username)
+    console.log('password=', req.body.password)
+    console.log('fullname=', req.body.fullname)
+    console.log('student_id=', req.body.student_id)
+    let insert = await knex('student')
+    .where({ username: req.body.username })
+    .update({
+        picture: req.file.filename
+    });
+    res.send({
+      message: 'อัปโหลดไฟล์สำเร็จ',
+      file: req.file
+    });
+  } catch (error) {
+    res.send({ status: 0, error: error.messege });
+  }
+  
+});
 
 // API สำหรับอัปโหลดหลายไฟล์
 app.post('/upload-multiple', upload.array('pictures'), (req, res) => {
@@ -250,72 +269,31 @@ app.post("/check2", async (req, res) => {
   }
 });
 
-app.post('/upload-single', upload.single('picture'), async (req, res) => {
-  try {
-  
-    // อัปเดตรูปภาพในฐานข้อมูล
-    const result = await knex('student')
-      .where({ username: req.body.username })
-      .update({ picture: req.file.filename });
-
-    // ตรวจสอบว่าการอัปเดตสำเร็จหรือไม่
-    if (result === 0) {
-      return res.status(404).send({ message: 'ไม่พบข้อมูลของผู้ใช้ในฐานข้อมูล' });
-    }
-
-    // ส่งข้อความยืนยันเมื่อสำเร็จ
-    res.send({
-      message: 'อัปโหลดไฟล์สำเร็จ',
-      file: req.file
-    });
-  } catch (error) {
-    // จัดการข้อผิดพลาด
-    console.error('Error uploading file:', error);
-    res.status(500).send({ message: 'เกิดข้อผิดพลาดในระบบ', error: error.message });
-  }
-});
-
 app.post('/insertStudent', async (req, res) => {
-  //req.body   =>  post
-  console.log('insert => ', req.body)
+  console.log('insert = ', req.body);
   try {
     let row = await knex('student')
       .insert({
-        student_id: req.body.student_id,
         fullname: req.body.fullname,
+        student_id: req.body.studentID,
         username: req.body.username,
         password: req.body.password,
-        picture: req.body.picture,
       })
     res.send({
-      insert: 'ok',
-      status: row
+      status: 1,
+      row: row
     })
-  } catch (e) {
-    res.send({ ok: 0, error: e.message });
+  } catch (error) {
+    res.send({ status: 0, error: error.messege });
   }
 })
-app.post('/deleteStudent', async (req, res) => {
-  try {
-    let del = await knex('student')
-      .where({
-        student_id: req.body.student_id
-      })
-      .del();
-    res.send({
-      del: 'ok',
-      status: row
-    })
-  } catch (e) {
-    res.send({ ok: 0, error: e.message });
-  }
-})
+
 app.get('/listStudent', async (req, res) => {
   try {
     console.log('user = ', req.query)
     let row = await knex('student');
     res.send({
-      'status': 'ok', 
+      'status': 'ok',
       datas: row, 
     })
   } catch (error) {

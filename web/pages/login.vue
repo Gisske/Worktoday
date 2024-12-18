@@ -128,85 +128,168 @@ export default {
 <style scoped>
 
 a {
-  text-decoration: none
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
 }
+a:hover {
+  color: #4ccfff; /* สีฟ้าสว่าง */
+}
+
 .login-background {
-  background: linear-gradient(90deg, #4c8479, #2b5f56);
+  background: linear-gradient(90deg, #007bff, #00a3ff); /* ฟ้าสด */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: gradient-shift 10s infinite alternate;
 }
+@keyframes gradient-shift {
+  0% {
+    background: linear-gradient(90deg, #007bff, #00a3ff);
+  }
+  100% {
+    background: linear-gradient(90deg, #00a3ff, #007bff);
+  }
+}
+
 .circular-image {
   width: 240px;
   height: 240px;
-  background: linear-gradient(180deg, #a9c7c3, #4c8479);
+  background: linear-gradient(180deg, #4ccfff, #007bff); /* ฟ้าสว่างถึงเข้ม */
   border-radius: 50%;
   overflow: hidden;
   display: flex;
-  /* display: inline-flex; */
   align-items: center;
   justify-content: center;
-  opacity: 1;
-  
- 
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.circular-image:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+}
+
 .text-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: fade-in 1.5s ease;
 }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .student-text {
   font-size: 60px;
-  color: #edb232;
+  color: #4ccfff; /* ฟ้าสว่าง */
   line-height: 1;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  animation: text-pop 2s infinite alternate;
 }
+@keyframes text-pop {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
 .check-app-text {
   font-size: 20px;
   color: white;
   margin-top: -5px;
+  animation: slide-in 1.5s ease;
 }
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .white-card {
   background-color: white !important;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.custom-rounded-top {
-  border-top-left-radius: 40px !important;
-  border-top-right-radius: 40px !important;
+.white-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
+
 .forgot-password-link {
-  color: #4c8479;
-  text-decoration: none; 
+  color: #007bff; /* ฟ้า */
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
+.forgot-password-link:hover {
+  color: #4ccfff; /* ฟ้าสว่าง */
+}
+
 .login-btn, .create-account-btn {
   text-transform: none;
   font-size: 1.2rem;
   border-radius: 50px !important;
+  background: linear-gradient(90deg, #007bff, #00a3ff); /* ไล่สีฟ้า */
+  color: white;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
+.login-btn:hover, .create-account-btn:hover {
+  background: linear-gradient(90deg, #00a3ff, #007bff); /* สลับสี */
+  transform: scale(1.05);
+}
+
 .create-account-text {
-  color: #2b524a;
+  color: #fff; /* ฟ้า */
 }
+
 .custom-padding {
   padding-left: 80px !important;
   padding-right: 80px !important;
 }
+
 .clickable-avatar {
   cursor: pointer;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, transform 0.3s ease;
 }
 .clickable-avatar:hover {
   opacity: 0.8;
+  transform: rotate(10deg);
 }
+
 :deep(.custom-text-field) {
   width: 100%;
   max-width: 400px;
 }
 :deep(.custom-text-field .v-field__outline) {
   --v-field-border-opacity: 1;
-  color: white !important;
+  border: 2px solid #4ccfff; /* ฟ้าสว่าง */
+  border-radius: 10px;
 }
 :deep(.custom-text-field .v-label) {
-  color: white !important;
+  color: #4ccfff !important; /* ฟ้าสว่าง */
+  font-weight: bold;
 }
 :deep(.custom-text-field input) {
   color: white !important;
 }
+
 :deep(.rounded-textfield .v-field__outline) {
   border-radius: 40px;
 }
+
 </style>
